@@ -27,10 +27,6 @@ templatePath = os.path.join('Photos', 'Template', "template.png") #Path of templ
 ImageShowed = False
 Printing = False
 BUTTON_PIN = 25
-#IMAGE_WIDTH = 558
-#IMAGE_HEIGHT = 374
-IMAGE_WIDTH = 550
-IMAGE_HEIGHT = 360
 
 #Setup GPIO
 GPIO.setmode(GPIO.BCM)
@@ -53,7 +49,7 @@ transfrom_y = infoObject.current_h # how high to scale the jpg when replaying
 
 camera = picamera.PiCamera()
 # Initialise the camera object
-camera.resolution = (infoObject.current_w, infoObject.current_h)
+camera.resolution = (3280, 2464)
 camera.rotation              = 0
 camera.hflip                 = True
 camera.vflip                 = False
