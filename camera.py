@@ -32,10 +32,6 @@ BUTTON_PIN = 25
 IMAGE_WIDTH = 550
 IMAGE_HEIGHT = 360
 
-
-# Load the background template
-bgimage = PIL.Image.open(templatePath)
-
 #Setup GPIO
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
@@ -319,39 +315,25 @@ def TakePictures():
 	global TotalImageCount
 
         input(pygame.event.get())
-        CountDownPhoto = "1/3"        
+        CountDownPhoto = ""        
         filename1 = CapturePicture()
 
-        CountDownPhoto = "2/3"
-        filename2 = CapturePicture()
-
-        CountDownPhoto = "3/3"
-        filename3 = CapturePicture()
-
         CountDownPhoto = ""
-        Message = "Attendez svp..."
+        Message = "BITTE WARTEN..."
         UpdateDisplay()
 
         image1 = PIL.Image.open(filename1)
-        image2 = PIL.Image.open(filename2)
-        image3 = PIL.Image.open(filename3)   
         TotalImageCount = TotalImageCount + 1
-	
-        bgimage.paste(image1, (625, 30))
-        bgimage.paste(image2, (625, 410))
-        bgimage.paste(image3, (55, 410))
         # Create the final filename
         ts = time.time()
         Final_Image_Name = os.path.join(imagefolder, "Final_" + str(TotalImageCount)+"_"+str(ts) + ".jpg")
         # Save it to the usb drive
-        bgimage.save(Final_Image_Name)
+        image1.save(Final_Image_Name)
         # Save a temp file, its faster to print from the pi than usb
-        bgimage.save('/home/pi/Desktop/tempprint.jpg')
+        image1.save('/home/pi/Desktop/tempprint.jpg')
         ShowPicture('/home/pi/Desktop/tempprint.jpg',3)
-        bgimage2 = bgimage.rotate(90)
-        bgimage2.save('/home/pi/Desktop/tempprint.jpg')
         ImageShowed = False
-        Message = "Appuyez sur le bouton pour imprimer"
+        Message = "KNOPF DRÜCKEN UM BILD ZU DRUCKEN"
         UpdateDisplay()
         time.sleep(1)
         Message = ""
