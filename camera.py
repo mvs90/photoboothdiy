@@ -49,7 +49,7 @@ transfrom_y = infoObject.current_h # how high to scale the jpg when replaying
 
 camera = picamera.PiCamera()
 # Initialise the camera object
-camera.resolution = (3280, 2464)
+#camera.resolution = (3280, 2464)
 camera.rotation              = 0
 camera.hflip                 = True
 camera.vflip                 = False
@@ -255,7 +255,7 @@ def CapturePicture():
         global pygame
         global ImageShowed
         global CountDownPhoto
-	global BackgroundColor	
+	global BackgroundColor
 	
 	BackgroundColor = ""
 	Numeral = ""
