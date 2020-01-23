@@ -402,7 +402,7 @@ def WaitForPrintingEvent():
                     return        
         BackgroundColor = ""
         Numeral = str(countDown)
-        Message = ""
+        Message = "PUSH BUTTON TO PRINT"
         UpdateDisplay()        
         countDown = countDown - 1
         time.sleep(1)
