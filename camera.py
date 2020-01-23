@@ -230,7 +230,6 @@ def ShowPicture(file, delay):
     backgroundPicture.fill((0, 0, 0))
     img = pygame.image.load(file)
     img = pygame.transform.scale(img, screenPicture.get_size())  # Make the image full screen
-    #backgroundPicture.set_alpha(200)
     backgroundPicture.blit(img, (0,0))
     screen.blit(backgroundPicture, (0, 0))
     pygame.display.flip()  # update the display
@@ -274,11 +273,10 @@ def CapturePicture():
 	pygame.display.flip()
 	camera.start_preview()
 	BackgroundColor = "black"
-
-	for x in range(3, -1, -1):
+	for x in range(5, -1, -1):
                 if x == 0:                        
                         Numeral = ""
-                        Message = "PRENEZ LA POSE"
+                        Message = "LOS GEHT'S..."
                 else:                        
                         Numeral = str(x)
                         Message = ""                
@@ -292,7 +290,7 @@ def CapturePicture():
         imagecounter = imagecounter + 1
         ts = time.time()
         filename = os.path.join(imagefolder, 'images', str(imagecounter)+"_"+str(ts) + '.jpg')
-        camera.capture(filename, resize=(IMAGE_WIDTH, IMAGE_HEIGHT))
+        camera.capture(filename)
         camera.stop_preview()
         #ShowPicture(filename, 2)
         ImageShowed = False
