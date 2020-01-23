@@ -294,7 +294,7 @@ def CapturePicture():
         filename = os.path.join(imagefolder, 'images', str(imagecounter)+"_"+str(ts) + '.jpg')
         camera.capture(filename, resize=(IMAGE_WIDTH, IMAGE_HEIGHT))
         camera.stop_preview()
-        ShowPicture(filename, 2)
+        #ShowPicture(filename, 2)
         ImageShowed = False
         return filename
     
@@ -333,9 +333,9 @@ def TakePictures():
         image1.save('/home/pi/Desktop/tempprint.jpg')
         ShowPicture('/home/pi/Desktop/tempprint.jpg',3)
         ImageShowed = False
-        Message = "KNOPF DRÜCKEN UM BILD ZU DRUCKEN"
+        Message = "KNOPF DRUECKEN UM BILD ZU DRUCKEN"
         UpdateDisplay()
-        time.sleep(1)
+        time.sleep(3)
         Message = ""
         UpdateDisplay()
         Printing = False
