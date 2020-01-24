@@ -262,11 +262,11 @@ def CapturePicture():
     time.sleep(1)
     CountDownPhoto = ""
     UpdateDisplay()
-    background.fill(pygame.Color("black"))
+    background.fill((255,255,255,128))
     screen.blit(background, (0, 0))
     pygame.display.flip()
     camera.start_preview()
-    BackgroundColor = "black"
+    BackgroundColor = ""
     for x in range(5, -1, -1):
         if x == 0:
             Numeral = ""
@@ -319,11 +319,11 @@ def TakePictures():
     image1.save(Final_Image_Name)
     # Save a temp file, its faster to print from the pi than usb
     image1.save('/home/pi/Desktop/tempprint.jpg')
-    ShowPicture('/home/pi/Desktop/tempprint.jpg', 3)
+    ShowPicture('/home/pi/Desktop/tempprint.jpg', 10)
     ImageShowed = False
-    Message = "KNOPF DRUECKEN UM BILD ZU DRUCKEN"
+    Message = "DRUCKEN?"
     UpdateDisplay()
-    time.sleep(3)
+    time.sleep(2)
     Message = ""
     UpdateDisplay()
     Printing = False
@@ -384,7 +384,7 @@ def WaitForPrintingEvent():
     global Message
     global Printing
     global pygame
-    countDown = 5
+    countDown = 3
     GPIO.add_event_detect(BUTTON_PIN, GPIO.RISING)
     GPIO.add_event_callback(BUTTON_PIN, MyCallback)
 
