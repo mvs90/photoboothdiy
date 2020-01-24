@@ -317,11 +317,6 @@ def TakePictures():
     UpdateDisplay()
     image1 = PIL.Image.open(filename1)
     TotalImageCount = TotalImageCount + 1
-    # Create the final filename
-    ts = time.time()
-    Final_Image_Name = os.path.join(imagefolder, "Final_" + str(TotalImageCount) + "_" + str(ts) + ".jpg")
-    # Save it to the usb drive
-    image1.save(Final_Image_Name)
     # Save a temp file, its faster to print from the pi than usb
     image1.save('/home/pi/Desktop/tempprint.jpg')
     ShowPicture('/home/pi/Desktop/tempprint.jpg', 10)
@@ -410,7 +405,7 @@ def WaitForPrintingEvent():
         UpdateDisplay()
         countDown = countDown - 1
         time.sleep(1)
-
+    GPIO.output(LED_PIN, GPIO.LOW)
     GPIO.remove_event_detect(BUTTON_PIN)
 
 
@@ -426,6 +421,7 @@ def WaitForEvent():
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
+                    GPIO.output(LED_PIN, GPIO.LOW)
                     pygame.quit()
                 if event.key == pygame.K_DOWN:
                     NotEvent = False
@@ -444,4 +440,7 @@ def main(threadName, *args):
 
 
 # launch the main thread
-Thread(target=main, args=('Main', 1)).start()
+try:
+    Thread(target=main, args=('Main', 1)).start()
+except:
+    GPIO.output(LED_PIN, GPIO.LOW)
