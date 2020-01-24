@@ -316,10 +316,8 @@ def TakePictures():
     Message = "BITTE WARTEN..."
     UpdateDisplay()
     image1 = PIL.Image.open(filename1)
-    TotalImageCount = TotalImageCount + 1
-    # Save a temp file, its faster to print from the pi than usb
     image1.save('/home/pi/Desktop/tempprint.jpg')
-    ShowPicture('/home/pi/Desktop/tempprint.jpg', 10)
+    ShowPicture('/home/pi/Desktop/tempprint.jpg', 8)
     ImageShowed = False
     Message = "DRUCKEN?"
     UpdateDisplay()
