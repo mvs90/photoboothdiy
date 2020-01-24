@@ -26,10 +26,14 @@ templatePath = os.path.join('Photos', 'Template', "template.png")  # Path of tem
 ImageShowed = False
 Printing = False
 BUTTON_PIN = 25
+LED_PIN = 18
 
 # Setup GPIO
 GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(False)
 GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(LED_PIN, GPIO.OUT)
+
 
 # initialise pygame
 pygame.init()  # Initialise pygame
@@ -304,6 +308,7 @@ def TakePictures():
     global Printing
     global PhotosPerCart
     global TotalImageCount
+    GPIO.output(LED_PIN, GPIO.LOW)
     input(pygame.event.get())
     CountDownPhoto = ""
     filename1 = CapturePicture()
@@ -385,6 +390,7 @@ def WaitForPrintingEvent():
     global Printing
     global pygame
     countDown = 3
+    GPIO.output(LED_PIN, GPIO.HIGH)
     GPIO.add_event_detect(BUTTON_PIN, GPIO.RISING)
     GPIO.add_event_callback(BUTTON_PIN, MyCallback)
 
@@ -409,6 +415,7 @@ def WaitForPrintingEvent():
 
 def WaitForEvent():
     global pygame
+    GPIO.output(LED_PIN, GPIO.HIGH)
     NotEvent = True
     while NotEvent:
         input_state = GPIO.input(BUTTON_PIN)
