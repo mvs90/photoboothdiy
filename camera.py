@@ -338,16 +338,21 @@ def TakePictures():
                 # get a list of printers
                 printers = conn.getPrinters()
                 # select printer 0
-                printer_name = printers.keys()[0]
-                Message = "Impression en cours..."
-                UpdateDisplay()
-                time.sleep(1)
-                # print the buffer file
-                printqueuelength = len(conn.getJobs())
-                if printqueuelength > 1:
-                    ShowPicture('/home/pi/Desktop/tempprint.jpg',3)
-                    conn.enablePrinter(printer_name)
-                    Message = "Impression impossible"
+                if printers.keys():
+                    printer_name = printers.keys()[0]
+                    Message = "Impression en cours..."
+                    UpdateDisplay()
+                    time.sleep(1)
+                    # print the buffer file
+                    printqueuelength = len(conn.getJobs())
+                    if printqueuelength > 1:
+                        ShowPicture('/home/pi/Desktop/tempprint.jpg',3)
+                        conn.enablePrinter(printer_name)
+                        Message = "Impression impossible"
+                        UpdateDisplay()
+                        time.sleep(1)
+                else:
+                    Message = "No Printer"
                     UpdateDisplay()
                     time.sleep(1)
             else:
