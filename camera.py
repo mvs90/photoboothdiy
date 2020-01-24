@@ -139,7 +139,7 @@ def DisplayText(fontSize, textToDisplay):
     if (textToDisplay != ""):
         # print(displaytext)
         font = pygame.font.Font(None, fontSize)
-        text = font.render(textToDisplay, 1, (227, 157, 200))
+        text = font.render(textToDisplay, 1, (45, 45, 45))
         textpos = text.get_rect()
         textpos.centerx = background.get_rect().centerx
         textpos.centery = background.get_rect().centery
