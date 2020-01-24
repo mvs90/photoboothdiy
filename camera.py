@@ -275,8 +275,8 @@ def CapturePicture():
         else:
             Numeral = str(x)
             Message = ""
-            UpdateDisplay()
-            time.sleep(1)
+        UpdateDisplay()
+        time.sleep(1)
     BackgroundColor = ""
     Numeral = ""
     Message = ""
