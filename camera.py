@@ -337,6 +337,7 @@ def TakePictures():
     Message = ""
     print(Printing)
     if Printing:
+        GPIO.output(LED_PIN, GPIO.LOW)
         if (TotalImageCount <= PhotosPerCart):
             if os.path.isfile('/home/pi/Desktop/tempprint.jpg'):
                 # Open a connection to cups
