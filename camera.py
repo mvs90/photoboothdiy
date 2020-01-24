@@ -11,7 +11,6 @@ from pygame.locals import *
 from time import sleep
 from PIL import Image, ImageDraw
 
-
 # initialise global variables
 Numeral = ""  # Numeral is the number display
 Message = ""  # Message is a fullscreen message
@@ -23,52 +22,54 @@ TotalImageCount = 0  # Counter for Display and to monitor paper usage
 PhotosPerCart = 30  # Selphy takes 16 sheets per tray
 imagecounter = 0
 imagefolder = 'Photos'
-templatePath = os.path.join('Photos', 'Template', "template.png") #Path of template image
+templatePath = os.path.join('Photos', 'Template', "template.png")  # Path of template image
 ImageShowed = False
 Printing = False
 BUTTON_PIN = 25
 
-#Setup GPIO
+# Setup GPIO
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 # initialise pygame
 pygame.init()  # Initialise pygame
-pygame.mouse.set_visible(False) #hide the mouse cursor
+pygame.mouse.set_visible(False)  # hide the mouse cursor
 infoObject = pygame.display.Info()
-screen = pygame.display.set_mode((infoObject.current_w,infoObject.current_h), pygame.FULLSCREEN)  # Full screen 
+screen = pygame.display.set_mode((infoObject.current_w, infoObject.current_h), pygame.FULLSCREEN)  # Full screen
 background = pygame.Surface(screen.get_size())  # Create the background object
 background = background.convert()  # Convert it to a background
 
-screenPicture = pygame.display.set_mode((infoObject.current_w,infoObject.current_h), pygame.FULLSCREEN)  # Full screen
+screenPicture = pygame.display.set_mode((infoObject.current_w, infoObject.current_h), pygame.FULLSCREEN)  # Full screen
 backgroundPicture = pygame.Surface(screenPicture.get_size())  # Create the background object
 backgroundPicture = background.convert()  # Convert it to a background
 
-transform_x = infoObject.current_w # how wide to scale the jpg when replaying
-transfrom_y = infoObject.current_h # how high to scale the jpg when replaying
+transform_x = infoObject.current_w  # how wide to scale the jpg when replaying
+transfrom_y = infoObject.current_h  # how high to scale the jpg when replaying
 
 camera = picamera.PiCamera()
 # Initialise the camera object
 camera.resolution = (transform_x, transfrom_y)
-camera.rotation              = 0
-camera.hflip                 = True
-camera.vflip                 = False
-camera.brightness            = 50
+camera.rotation = 0
+camera.hflip = True
+camera.vflip = False
+camera.brightness = 50
 camera.preview_alpha = 120
 camera.preview_fullscreen = True
-#camera.framerate             = 24
-#camera.sharpness             = 0
-#camera.contrast              = 8
-#camera.saturation            = 0
-#camera.ISO                   = 0
-#camera.video_stabilization   = False
-#camera.exposure_compensation = 0
-#camera.exposure_mode         = 'auto'
-#camera.meter_mode            = 'average'
-#camera.awb_mode              = 'auto'
-#camera.image_effect          = 'none'
-#camera.color_effects         = None
-#camera.crop                  = (0.0, 0.0, 1.0, 1.0)
+
+
+# camera.framerate             = 24
+# camera.sharpness             = 0
+# camera.contrast              = 8
+# camera.saturation            = 0
+# camera.ISO                   = 0
+# camera.video_stabilization   = False
+# camera.exposure_compensation = 0
+# camera.exposure_mode         = 'auto'
+# camera.meter_mode            = 'average'
+# camera.awb_mode              = 'auto'
+# camera.image_effect          = 'none'
+# camera.color_effects         = None
+# camera.crop                  = (0.0, 0.0, 1.0, 1.0)
 
 
 # A function to handle keyboard/mouse/device input events
@@ -78,55 +79,49 @@ def input(events):
                 (event.type == KEYDOWN and event.key == K_ESCAPE)):
             pygame.quit()
 
-			
+
 # set variables to properly display the image on screen at right ratio
 def set_demensions(img_w, img_h):
-    # Note this only works when in booting in desktop mode.
-	# When running in terminal, the size is not correct (it displays small). Why?
-
     # connect to global vars
     global transform_y, transform_x, offset_y, offset_x
-
     # based on output screen resolution, calculate how to display
-    ratio_h = (infoObject.current_w * img_h) / img_w 
-
+    ratio_h = (infoObject.current_w * img_h) / img_w
     if (ratio_h < infoObject.current_h):
-        #Use horizontal black bars
-        #print "horizontal black bars"
+        # Use horizontal black bars
+        # print "horizontal black bars"
         transform_y = ratio_h
         transform_x = infoObject.current_w
         offset_y = (infoObject.current_h - ratio_h) / 2
         offset_x = 0
     elif (ratio_h > infoObject.current_h):
-        #Use vertical black bars
-        #print "vertical black bars"
+        # Use vertical black bars
+        # print "vertical black bars"
         transform_x = (infoObject.current_h * img_w) / img_h
         transform_y = infoObject.current_h
         offset_x = (infoObject.current_w - transform_x) / 2
         offset_y = 0
     else:
-        #No need for black bars as photo ratio equals screen ratio
-        #print "no black bars"
+        # No need for black bars as photo ratio equals screen ratio
+        # print "no black bars"
         transform_x = infoObject.current_w
         transform_y = infoObject.current_h
         offset_y = offset_x = 0
 
+
 def InitFolder():
     global imagefolder
     global Message
- 
     Message = 'Folder Check...'
     UpdateDisplay()
     Message = ''
-
-    #check image folder existing, create if not exists
-    if not os.path.isdir(imagefolder):	
-        os.makedirs(imagefolder)	
-            
+    # check image folder existing, create if not exists
+    if not os.path.isdir(imagefolder):
+        os.makedirs(imagefolder)
     imagefolder2 = os.path.join(imagefolder, 'images')
     if not os.path.isdir(imagefolder2):
         os.makedirs(imagefolder2)
-		
+
+
 def DisplayText(fontSize, textToDisplay):
     global Numeral
     global Message
@@ -139,20 +134,21 @@ def DisplayText(fontSize, textToDisplay):
     global CountDownPhoto
 
     if (BackgroundColor != ""):
-            #print(BackgroundColor)
-            background.fill(pygame.Color("black"))
+        # print(BackgroundColor)
+        background.fill(pygame.Color("black"))
     if (textToDisplay != ""):
-            #print(displaytext)
-            font = pygame.font.Font(None, fontSize)
-            text = font.render(textToDisplay, 1, (227, 157, 200))
-            textpos = text.get_rect()
-            textpos.centerx = background.get_rect().centerx
-            textpos.centery = background.get_rect().centery
-            if(ImageShowed):
-                    backgroundPicture.blit(text, textpos)
-            else:
-                    background.blit(text, textpos)
-				
+        # print(displaytext)
+        font = pygame.font.Font(None, fontSize)
+        text = font.render(textToDisplay, 1, (227, 157, 200))
+        textpos = text.get_rect()
+        textpos.centerx = background.get_rect().centerx
+        textpos.centery = background.get_rect().centery
+        if (ImageShowed):
+            backgroundPicture.blit(text, textpos)
+        else:
+            background.blit(text, textpos)
+
+
 def UpdateDisplay():
     # init global variables from main thread
     global Numeral
@@ -164,56 +160,56 @@ def UpdateDisplay():
     global screenPicture
     global backgroundPicture
     global CountDownPhoto
-   
+
     background.fill(pygame.Color("white"))  # White background
-    #DisplayText(100, Message)
-    #DisplayText(800, Numeral)
-    #DisplayText(500, CountDownPhoto)
+    # DisplayText(100, Message)
+    # DisplayText(800, Numeral)
+    # DisplayText(500, CountDownPhoto)
 
     if (BackgroundColor != ""):
-            #print(BackgroundColor)
-            background.fill(pygame.Color("black"))
+        # print(BackgroundColor)
+        background.fill(pygame.Color("black"))
     if (Message != ""):
-            #print(displaytext)
-            font = pygame.font.Font(None, 100)
-            text = font.render(Message, 1, (227, 157, 200))
-            textpos = text.get_rect()
-            textpos.centerx = background.get_rect().centerx
-            textpos.centery = background.get_rect().centery
-            if(ImageShowed):
-                    backgroundPicture.blit(text, textpos)
-            else:
-                    background.blit(text, textpos)
+        # print(displaytext)
+        font = pygame.font.Font(None, 100)
+        text = font.render(Message, 1, (227, 157, 200))
+        textpos = text.get_rect()
+        textpos.centerx = background.get_rect().centerx
+        textpos.centery = background.get_rect().centery
+        if (ImageShowed):
+            backgroundPicture.blit(text, textpos)
+        else:
+            background.blit(text, textpos)
 
     if (Numeral != ""):
-            #print(displaytext)
-            font = pygame.font.Font(None, 800)
-            text = font.render(Numeral, 1, (227, 157, 200))
-            textpos = text.get_rect()
-            textpos.centerx = background.get_rect().centerx
-            textpos.centery = background.get_rect().centery
-            if(ImageShowed):
-                    backgroundPicture.blit(text, textpos)
-            else:
-                    background.blit(text, textpos)
+        # print(displaytext)
+        font = pygame.font.Font(None, 800)
+        text = font.render(Numeral, 1, (227, 157, 200))
+        textpos = text.get_rect()
+        textpos.centerx = background.get_rect().centerx
+        textpos.centery = background.get_rect().centery
+        if (ImageShowed):
+            backgroundPicture.blit(text, textpos)
+        else:
+            background.blit(text, textpos)
 
     if (CountDownPhoto != ""):
-            #print(displaytext)
-            font = pygame.font.Font(None, 500)
-            text = font.render(CountDownPhoto, 1, (227, 157, 200))
-            textpos = text.get_rect()
-            textpos.centerx = background.get_rect().centerx
-            textpos.centery = background.get_rect().centery
-            if(ImageShowed):
-                    backgroundPicture.blit(text, textpos)
-            else:
-                    background.blit(text, textpos)
-    
-    if(ImageShowed == True):
+        # print(displaytext)
+        font = pygame.font.Font(None, 500)
+        text = font.render(CountDownPhoto, 1, (227, 157, 200))
+        textpos = text.get_rect()
+        textpos.centerx = background.get_rect().centerx
+        textpos.centery = background.get_rect().centery
+        if (ImageShowed):
+            backgroundPicture.blit(text, textpos)
+        else:
+            background.blit(text, textpos)
+
+    if (ImageShowed == True):
         screenPicture.blit(backgroundPicture, (0, 0))
     else:
         screen.blit(background, (0, 0))
-   
+
     pygame.display.flip()
     return
 
@@ -226,22 +222,24 @@ def ShowPicture(file, delay):
     backgroundPicture.fill((0, 0, 0))
     img = pygame.image.load(file)
     img = pygame.transform.scale(img, screenPicture.get_size())  # Make the image full screen
-    backgroundPicture.blit(img, (0,0))
+    backgroundPicture.blit(img, (0, 0))
     screen.blit(backgroundPicture, (0, 0))
     pygame.display.flip()  # update the display
     ImageShowed = True
     time.sleep(delay)
-	
+
+
 # display one image on screen
-def show_image(image_path):	
-    screen.fill(pygame.Color("white")) # clear the screen
-    img = pygame.image.load(image_path) # load the image
+def show_image(image_path):
+    screen.fill(pygame.Color("white"))  # clear the screen
+    img = pygame.image.load(image_path)  # load the image
     img = img.convert()
-    set_demensions(img.get_width(), img.get_height()) # set pixel dimensions based on image
+    set_demensions(img.get_width(), img.get_height())  # set pixel dimensions based on image
     x = (infoObject.current_w / 2) - (img.get_width() / 2)
     y = (infoObject.current_h / 2) - (img.get_height() / 2)
-    screen.blit(img,(x,y))
+    screen.blit(img, (x, y))
     pygame.display.flip()
+
 
 def CapturePicture():
     global imagecounter
@@ -260,6 +258,7 @@ def CapturePicture():
     Numeral = ""
     Message = ""
     UpdateDisplay()
+    camera.resolution = (transform_x, transfrom_y)
     time.sleep(1)
     CountDownPhoto = ""
     UpdateDisplay()
@@ -283,11 +282,13 @@ def CapturePicture():
     UpdateDisplay()
     imagecounter = imagecounter + 1
     ts = time.time()
-    filename = os.path.join(imagefolder, 'images', str(imagecounter)+"_"+str(ts) + '.jpg')
-    camera.capture(filename)
+    filename = os.path.join(imagefolder, 'images', str(imagecounter) + "_" + str(ts) + '.jpg')
     camera.stop_preview()
+    camera.resolution = (3280, 2464)
+    camera.capture(filename)
     ImageShowed = False
     return filename
+
 
 def TakePictures():
     global imagecounter
@@ -313,12 +314,12 @@ def TakePictures():
     TotalImageCount = TotalImageCount + 1
     # Create the final filename
     ts = time.time()
-    Final_Image_Name = os.path.join(imagefolder, "Final_" + str(TotalImageCount)+"_"+str(ts) + ".jpg")
+    Final_Image_Name = os.path.join(imagefolder, "Final_" + str(TotalImageCount) + "_" + str(ts) + ".jpg")
     # Save it to the usb drive
     image1.save(Final_Image_Name)
     # Save a temp file, its faster to print from the pi than usb
     image1.save('/home/pi/Desktop/tempprint.jpg')
-    ShowPicture('/home/pi/Desktop/tempprint.jpg',3)
+    ShowPicture('/home/pi/Desktop/tempprint.jpg', 3)
     ImageShowed = False
     Message = "KNOPF DRUECKEN UM BILD ZU DRUCKEN"
     UpdateDisplay()
@@ -346,7 +347,7 @@ def TakePictures():
                     # print the buffer file
                     printqueuelength = len(conn.getJobs())
                     if printqueuelength > 1:
-                        ShowPicture('/home/pi/Desktop/tempprint.jpg',3)
+                        ShowPicture('/home/pi/Desktop/tempprint.jpg', 3)
                         conn.enablePrinter(printer_name)
                         Message = "Impression impossible"
                         UpdateDisplay()
@@ -363,18 +364,20 @@ def TakePictures():
             Numeral = ""
             UpdateDisplay()
             time.sleep(1)
-                
+
         Message = ""
         Numeral = ""
         ImageShowed = False
         UpdateDisplay()
         time.sleep(1)
 
+
 def MyCallback(channel):
     global Printing
     GPIO.remove_event_detect(BUTTON_PIN)
-    Printing=True
-	
+    Printing = True
+
+
 def WaitForPrintingEvent():
     global BackgroundColor
     global Numeral
@@ -384,26 +387,26 @@ def WaitForPrintingEvent():
     countDown = 5
     GPIO.add_event_detect(BUTTON_PIN, GPIO.RISING)
     GPIO.add_event_callback(BUTTON_PIN, MyCallback)
-    
+
     while Printing == False and countDown > 0:
-        if(Printing == True):
+        if (Printing == True):
             return
-        for event in pygame.event.get():			
-            if event.type == pygame.KEYDOWN:				
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_DOWN:
                     GPIO.remove_event_detect(BUTTON_PIN)
                     Printing = True
-                    return        
+                    return
         BackgroundColor = ""
         Numeral = str(countDown)
         Message = "PUSH BUTTON TO PRINT"
-        UpdateDisplay()        
+        UpdateDisplay()
         countDown = countDown - 1
         time.sleep(1)
 
     GPIO.remove_event_detect(BUTTON_PIN)
-        
-	
+
+
 def WaitForEvent():
     global pygame
     NotEvent = True
@@ -421,6 +424,7 @@ def WaitForEvent():
                     return
             time.sleep(0.1)
 
+
 def main(threadName, *args):
     InitFolder()
     while True:
@@ -430,6 +434,6 @@ def main(threadName, *args):
         TakePictures()
     GPIO.cleanup()
 
+
 # launch the main thread
 Thread(target=main, args=('Main', 1)).start()
-
