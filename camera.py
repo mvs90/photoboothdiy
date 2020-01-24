@@ -266,7 +266,7 @@ def CapturePicture():
     background.fill(pygame.Color("black"))
     screen.blit(background, (0, 0))
     pygame.display.flip()
-    camera.start_preview()
+    camera.start_preview(fullscreen=False,window=(100,200,300,400))
     BackgroundColor = "black"
     for x in range(5, -1, -1):
         if x == 0:
