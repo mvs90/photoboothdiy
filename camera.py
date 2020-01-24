@@ -49,7 +49,7 @@ transfrom_y = infoObject.current_h # how high to scale the jpg when replaying
 
 camera = picamera.PiCamera()
 # Initialise the camera object
-#camera.resolution = (3280, 2464)
+camera.resolution = (3280, 2464)
 camera.rotation              = 0
 camera.hflip                 = True
 camera.vflip                 = False
@@ -266,7 +266,7 @@ def CapturePicture():
     background.fill(pygame.Color("black"))
     screen.blit(background, (0, 0))
     pygame.display.flip()
-    camera.start_preview(fullscreen=False,window=(100,200,300,400))
+    camera.start_preview(fullscreen=True)
     BackgroundColor = "black"
     for x in range(5, -1, -1):
         if x == 0:
@@ -423,7 +423,7 @@ def main(threadName, *args):
         WaitForEvent()
         time.sleep(0.2)
         TakePictures()
-        GPIO.cleanup()
+    GPIO.cleanup()
 
 # launch the main thread
 Thread(target=main, args=('Main', 1)).start()
