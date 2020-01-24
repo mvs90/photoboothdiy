@@ -277,17 +277,17 @@ def CapturePicture():
             Message = ""
             UpdateDisplay()
             time.sleep(1)
-        BackgroundColor = ""
-        Numeral = ""
-        Message = ""
-        UpdateDisplay()
-        imagecounter = imagecounter + 1
-        ts = time.time()
-        filename = os.path.join(imagefolder, 'images', str(imagecounter)+"_"+str(ts) + '.jpg')
-        camera.capture(filename)
-        camera.stop_preview()
-        ImageShowed = False
-        return filename
+    BackgroundColor = ""
+    Numeral = ""
+    Message = ""
+    UpdateDisplay()
+    imagecounter = imagecounter + 1
+    ts = time.time()
+    filename = os.path.join(imagefolder, 'images', str(imagecounter)+"_"+str(ts) + '.jpg')
+    camera.capture(filename)
+    camera.stop_preview()
+    ImageShowed = False
+    return filename
 
 def TakePictures():
     global imagecounter
