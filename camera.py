@@ -49,7 +49,7 @@ transfrom_y = infoObject.current_h # how high to scale the jpg when replaying
 
 camera = picamera.PiCamera()
 # Initialise the camera object
-camera.resolution = (3280, 2464)
+camera.resolution = (transform_x, transfrom_y)
 camera.rotation              = 0
 camera.hflip                 = True
 camera.vflip                 = False
