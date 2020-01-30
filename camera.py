@@ -5,6 +5,8 @@ import os
 import PIL.Image
 import cups
 import RPi.GPIO as GPIO
+from rgbmatrix import RGBMatrix, RGBMatrixOptions
+# from PIL import Image
 
 from threading import Thread
 from pygame.locals import *
@@ -33,6 +35,31 @@ GPIO.setwarnings(False)
 GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(LED_PIN, GPIO.OUT)
 
+image_file1 = "1.png"
+image_file2 = "2.png"
+image_file3 = "3.png"
+image_file4 = "fertig.png"
+image_file5 = "los.png"
+image_file6 = "logo.png"
+
+image1 = Image.open(image_file1)
+image2 = Image.open(image_file2)
+image3 = Image.open(image_file3)
+fertig = Image.open(image_file4)
+los = Image.open(image_file5)
+logo = Image.open(image_file6)
+
+# Configuration for the matrix
+options = RGBMatrixOptions()
+options.cols = 64
+options.chain_length = 2
+options.hardware_mapping = 'adafruit-hat'  # If you have an Adafruit HAT: 'adafruit-hat'
+options.gpio_slowdown = 3
+options.pwm_bits = 2
+options.disable_hardware_pulsing = True
+options.brightness = 70
+
+matrix = RGBMatrix(options=options)
 
 # initialise pygame
 pygame.init()  # Initialise pygame
@@ -266,7 +293,7 @@ def CapturePicture():
     time.sleep(1)
     CountDownPhoto = ""
     UpdateDisplay()
-    background.fill((255,255,255,128))
+    background.fill((255, 255, 255, 128))
     screen.blit(background, (0, 0))
     pygame.display.flip()
     camera.start_preview()
@@ -429,6 +456,7 @@ def WaitForEvent():
 
 def main(threadName, *args):
     InitFolder()
+    matrix.SetImage(logo.convert('RGB'))
     while True:
         show_image('/home/pi/images/start_camera.jpg')
         WaitForEvent()
