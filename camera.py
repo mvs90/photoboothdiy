@@ -21,12 +21,11 @@ SmallMessage = ""  # SmallMessage is a lower banner message
 TotalImageCount = 0  # Counter for Display and to monitor paper usage
 PhotosPerCart = 30  # Selphy takes 16 sheets per tray
 imagecounter = 0
-imagefolder = 'Photos'
-templatePath = os.path.join('Photos', 'Template', "template.png")  # Path of template image
+imagefolder = '/home/pi/Photos/'
 ImageShowed = False
 Printing = False
 BUTTON_PIN = 25
-LED_PIN = 18
+LED_PIN = 19
 
 # Setup GPIO
 GPIO.setmode(GPIO.BCM)
@@ -52,7 +51,7 @@ transfrom_y = infoObject.current_h  # how high to scale the jpg when replaying
 
 camera = picamera.PiCamera()
 # Initialise the camera object
-camera.resolution = (transform_x, transfrom_y)
+camera.resolution = (1280, 962)
 camera.rotation = 0
 camera.hflip = True
 camera.vflip = False
@@ -237,6 +236,7 @@ def ShowPicture(file, delay):
 def show_image(image_path):
     screen.fill(pygame.Color("white"))  # clear the screen
     img = pygame.image.load(image_path)  # load the image
+    rect = img.get_rect()
     img = img.convert()
     set_demensions(img.get_width(), img.get_height())  # set pixel dimensions based on image
     x = (infoObject.current_w / 2) - (img.get_width() / 2)
@@ -430,7 +430,7 @@ def WaitForEvent():
 def main(threadName, *args):
     InitFolder()
     while True:
-        show_image('images/start_camera.jpg')
+        show_image('/home/pi/images/start_camera.jpg')
         WaitForEvent()
         time.sleep(0.2)
         TakePictures()
